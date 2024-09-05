@@ -1,0 +1,1 @@
+"""Sudoku generator and solver, credits going to ... for the idea."""
