@@ -1,4 +1,5 @@
 """Sudoku generator and solver, credits going to ... for the idea."""
+from random import randint
 
 class Board:
     def __init__(self, code=None):
@@ -18,17 +19,29 @@ class Board:
     # def get_code_from_board(self, board):
 
     def new_board(self):
+        # return [
+        # [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        # [0, 7, 2, 0, 0, 1, 0, 3, 0],
+        # [1, 8, 0, 0, 0, 6, 7, 2, 0],
+        # [7, 0, 0, 2, 0, 0, 5, 6, 0],
+        # [5, 0, 0, 0, 0, 0, 0, 0, 2],
+        # [0, 6, 9, 0, 0, 3, 0, 0, 7],
+        # [0, 2, 4, 3, 0, 0, 0, 9, 1],
+        # [0, 3, 0, 6, 0, 0, 4, 5, 0],
+        # [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        # ]
+    
         return [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 7, 2, 0, 0, 1, 0, 3, 0],
-        [1, 8, 0, 0, 0, 6, 7, 2, 0],
-        [7, 0, 0, 2, 0, 0, 5, 6, 0],
-        [5, 0, 0, 0, 0, 0, 0, 0, 2],
-        [0, 6, 9, 0, 0, 3, 0, 0, 7],
-        [0, 2, 4, 3, 0, 0, 0, 9, 1],
-        [0, 3, 0, 6, 0, 0, 4, 5, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    ]
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ]
 
     def display_board(self):
         for row in self.board:
@@ -91,11 +104,41 @@ class Board:
             self.board[row][column] = 0
 
         return False
+    
+
+    # randomly populate 3 diagonal 9x9 boxes top left to bottom right. Then use algorithm to solve rest of the board.
+    def generate_random_board(self):
+        nums = list(range(1,10))
+        for row in range(3):
+            for col in range(3):
+                rand_idx = randint(0, len(nums)-1)
+                rand_num = nums.pop(rand_idx)
+                self.board[row][col] = rand_num
+
+        nums = list(range(1,10))
+        for row in range(3, 6):
+            for col in range(3, 6):
+                rand_idx = randint(0, len(nums)-1)
+                rand_num = nums.pop(rand_idx)
+                self.board[row][col] = rand_num
+
+        nums = list(range(1,10))
+        for row in range(6, 9):
+            for col in range(6, 9):
+                rand_idx = randint(0, len(nums)-1)
+                rand_num = nums.pop(rand_idx)
+                self.board[row][col] = rand_num
+
+        
+
+
 
 
     
 test = Board()
 print('Start')
+test.display_board()
+test.generate_random_board()
 test.display_board()
 print('...')
 print('...')
