@@ -1,5 +1,6 @@
 """Sudoku generator and solver, credits going to ... for the idea."""
 from random import randint
+import copy
 
 class Board:
     def __init__(self, code=None):
@@ -47,10 +48,14 @@ class Board:
         for row in self.board:
             print(row)
 
-    def board_to_code(self):
+    def board_to_code(self, input_board = None):
         code = ''
-        for row in self.board:
-            code += ''.join(map(str, row))
+        if input_board:
+            for row in input_board:
+                code += ''.join(map(str, row))
+        else:
+            for row in self.board:
+                code += ''.join(map(str, row))
 
         return code
 
@@ -92,16 +97,16 @@ class Board:
         if not _empty_cell:
             return True
         else:
-            row, column = _empty_cell
+            row, col = _empty_cell
 
         for num in range(1, 10):
-            if self.try_solution(row, column, num):
-                self.board[row][column] = num
+            if self.try_solution(row, col, num):
+                self.board[row][col] = num
 
                 if self.solve():
                     return self.board
                 
-            self.board[row][column] = 0
+            self.board[row][col] = 0
 
         return False
     
@@ -129,6 +134,123 @@ class Board:
                 rand_num = nums.pop(rand_idx)
                 self.board[row][col] = rand_num
 
+        self.__generateCont()
+
+    def __generateCont(self): # uses recursion to finish generating a random board
+        for row in range(len(self.board)):
+            for col in range(len(self.board[row])):
+                if self.board[row][col] == 0:
+                    _num = randint(1, 9)
+
+                    if self.try_solution(row, col, _num):
+                        self.board[row][col] = _num
+
+                        if self.solve():
+                            self.__generateCont()
+                            return self.board
+
+                        self.board[row][col] = 0
+
+        return False
+
+    def solve_board_for_num_solutions(self, row, col):
+        for num in range(1, 10):
+            if self.try_solution(row, col, num):
+                self.board[row][col] = num
+
+                if self.solve():
+                    return self.board
+                
+                self.board[row][col] = 0
+
+            return False
+        
+    def find_the_indexth_empty_space_for_num_solutions(self, board_element, idx):
+        spaces = 1
+        for row in range(len(board_element)):
+            for col in range(len(board_element[row])):
+                if board_element[row][col] == 0:
+                    if spaces == idx:
+                        return (row, col)
+                    
+                    spaces += 1
+
+        return False
+
+    def number_solutions(self):
+        empty_cells = 0
+        solutions = []
+
+        for row in range(0,9):
+            for col in range(0,9):
+                if self.board[row][col] == 0:
+                    empty_cells += 1
+
+        for i in range(1, empty_cells):
+            board_clone = copy.deepcopy(self)
+
+            row, col = self.find_the_indexth_empty_space_for_num_solutions(board_clone.board, i)
+            clone_solution = board_clone.solve_board_for_num_solutions(row, col)
+
+            clone_code = self.board_to_code(input_board = clone_solution)
+            if clone_code != self.board_to_code():
+                solutions.append(clone_code)
+
+        return list(set(solutions))
+    
+    def generate_board_difficulty(self, complete_board, difficulty):
+        self.board = copy.deepcopy(complete_board)
+
+        if difficulty == 1:
+            squares_to_remove = 36
+        elif difficulty == 2:
+            squares_to_remove = 46
+        elif difficulty == 3:
+            squares_to_remove = 52
+        else:
+            return
+        
+        # loop through removing randomly from top to bottom
+        removed_count = 0
+        while removed_count < 4:
+            row = randint(0, 2)
+            col = randint(0, 2)
+            if self.board[row][col] != 0:
+                self.board[row][col] = 0
+                removed_count += 1
+
+        while removed_count < 8:
+            row = randint(3, 6)
+            col = randint(0, 8)
+            if self.board[row][col] != 0:
+                self.board[row][col] = 0
+                removed_count += 1
+
+        while removed_count < 12:
+            row = randint(6, 8)
+            col = randint(0, 8)
+            if self.board[row][col] != 0:
+                self.board[row][col] = 0
+                removed_count += 1
+
+        while squares_to_remove > removed_count:
+            row = randint(0, 8)
+            col = randint(0, 8)
+            if self.board[row][col] != 0:
+                num_cache = self.board[row][col]
+                self.board[row][col] = 0
+                if len(self.number_solutions()) != 1:
+                    self.board[row][col] = num_cache
+                    continue
+                removed_count += 1
+
+        return self, complete_board
+    
+
+
+            
+        
+
         
 
 
@@ -138,8 +260,11 @@ class Board:
 test = Board()
 print('Start')
 test.display_board()
+print('...')
 test.generate_random_board()
+test.generate_board_difficulty(test.board, 3)
 test.display_board()
+# print(test.number_solutions())
 print('...')
 print('...')
 print('...')
