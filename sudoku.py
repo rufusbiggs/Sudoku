@@ -20,29 +20,29 @@ class Board:
     # def get_code_from_board(self, board):
 
     def new_board(self):
-        # return [
-        # [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        # [0, 7, 2, 0, 0, 1, 0, 3, 0],
-        # [1, 8, 0, 0, 0, 6, 7, 2, 0],
-        # [7, 0, 0, 2, 0, 0, 5, 6, 0],
-        # [5, 0, 0, 0, 0, 0, 0, 0, 2],
-        # [0, 6, 9, 0, 0, 3, 0, 0, 7],
-        # [0, 2, 4, 3, 0, 0, 0, 9, 1],
-        # [0, 3, 0, 6, 0, 0, 4, 5, 0],
-        # [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        # ]
-    
         return [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 7, 2, 0, 0, 1, 0, 3, 0],
+        [1, 8, 0, 0, 0, 6, 7, 2, 0],
+        [7, 0, 0, 2, 0, 0, 5, 6, 0],
+        [5, 0, 0, 0, 0, 0, 0, 0, 2],
+        [0, 6, 9, 0, 0, 3, 0, 0, 7],
+        [0, 2, 4, 3, 0, 0, 0, 9, 1],
+        [0, 3, 0, 6, 0, 0, 4, 5, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
         ]
+    
+        # return [
+        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        # ]
 
     def display_board(self):
         for row in self.board:
@@ -247,29 +247,17 @@ class Board:
         return self, complete_board
     
 
+    def generate_board_to_solve(self, difficulty):
+        self.generate_random_board()
+        self, complete_board = self.generate_board_difficulty(self.board, difficulty)
+        return self.board_to_code(), self.board_to_code(complete_board)
 
             
-        
+# question_board_code = board.generate_board_to_solve(2) # generates a medium level sudoku
+# board.display_board()     
 
-        
-
-
-
-
-    
-test = Board()
-print('Start')
-test.display_board()
-print('...')
-test.generate_random_board()
-test.generate_board_difficulty(test.board, 3)
-test.display_board()
-# print(test.number_solutions())
-print('...')
-print('...')
-print('...')
-input("Hit enter to solve!")
-test.solve()
-test.display_board()
-
-
+if __name__ == '__main__':
+        board = Board()
+        board.solve()
+        board.display_board()
+        print(board.board_to_code())
