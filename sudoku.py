@@ -20,29 +20,29 @@ class Board:
     # def get_code_from_board(self, board):
 
     def new_board(self):
-        return [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 7, 2, 0, 0, 1, 0, 3, 0],
-        [1, 8, 0, 0, 0, 6, 7, 2, 0],
-        [7, 0, 0, 2, 0, 0, 5, 6, 0],
-        [5, 0, 0, 0, 0, 0, 0, 0, 2],
-        [0, 6, 9, 0, 0, 3, 0, 0, 7],
-        [0, 2, 4, 3, 0, 0, 0, 9, 1],
-        [0, 3, 0, 6, 0, 0, 4, 5, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ]
-    
         # return [
-        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        # [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        # [0, 7, 2, 0, 0, 1, 0, 3, 0],
+        # [1, 8, 0, 0, 0, 6, 7, 2, 0],
+        # [7, 0, 0, 2, 0, 0, 5, 6, 0],
+        # [5, 0, 0, 0, 0, 0, 0, 0, 2],
+        # [0, 6, 9, 0, 0, 3, 0, 0, 7],
+        # [0, 2, 4, 3, 0, 0, 0, 9, 1],
+        # [0, 3, 0, 6, 0, 0, 4, 5, 0],
+        # [0, 0, 0, 0, 0, 0, 0, 0, 0],
         # ]
+    
+        return [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ]
 
     def display_board(self):
         for row in self.board:
@@ -196,6 +196,7 @@ class Board:
             if clone_code != self.board_to_code():
                 solutions.append(clone_code)
 
+        print(len(list(set(solutions))))
         return list(set(solutions))
     
     def generate_board_difficulty(self, complete_board, difficulty):
@@ -221,19 +222,21 @@ class Board:
 
         while removed_count < 8:
             row = randint(3, 6)
-            col = randint(0, 8)
+            col = randint(3, 8)
             if self.board[row][col] != 0:
                 self.board[row][col] = 0
                 removed_count += 1
 
         while removed_count < 12:
             row = randint(6, 8)
-            col = randint(0, 8)
+            col = randint(6, 8)
             if self.board[row][col] != 0:
                 self.board[row][col] = 0
                 removed_count += 1
 
-        while squares_to_remove > removed_count:
+        print('still generating')
+        while removed_count < squares_to_remove:
+            print(removed_count)
             row = randint(0, 8)
             col = randint(0, 8)
             if self.board[row][col] != 0:
@@ -243,13 +246,16 @@ class Board:
                     self.board[row][col] = num_cache
                     continue
                 removed_count += 1
-
+        print('done, not returned')
         return self, complete_board
     
 
     def generate_board_to_solve(self, difficulty):
+        print('running request')
         self.generate_random_board()
+        print('random board generated')
         self, complete_board = self.generate_board_difficulty(self.board, difficulty)
+        print('done the difficulty thing')
         return self.board_to_code(), self.board_to_code(complete_board)
 
             
@@ -258,6 +264,6 @@ class Board:
 
 if __name__ == '__main__':
         board = Board()
-        board.solve()
+        board.generate_board_to_solve(1)
         board.display_board()
         print(board.board_to_code())

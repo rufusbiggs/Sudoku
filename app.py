@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from sudoku import Board
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/generate', methods=['GET'])
 def generate_sudoku_board():
