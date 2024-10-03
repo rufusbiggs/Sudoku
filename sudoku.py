@@ -234,7 +234,6 @@ class Board:
                 self.board[row][col] = 0
                 removed_count += 1
 
-        print('still generating')
         while removed_count < squares_to_remove:
             print(removed_count)
             row = randint(0, 8)
@@ -246,16 +245,12 @@ class Board:
                     self.board[row][col] = num_cache
                     continue
                 removed_count += 1
-        print('done, not returned')
         return self, complete_board
     
 
     def generate_board_to_solve(self, difficulty):
-        print('running request')
         self.generate_random_board()
-        print('random board generated')
         self, complete_board = self.generate_board_difficulty(self.board, difficulty)
-        print('done the difficulty thing')
         return self.board_to_code(), self.board_to_code(complete_board)
 
             
